@@ -10,6 +10,8 @@ export function useOnDraw(onDraw) {
     if(!ref) return;
     canvasRef.current = ref;
     initMouseMoveListener();
+    initMouseDownListener();
+    initMouseUpListener();
   }
 
   function initMouseMoveListener() {
@@ -22,6 +24,21 @@ export function useOnDraw(onDraw) {
       }
     }
     window.addEventListener("mousemove", mouseMoveListener)
+  }
+
+  function initMouseUpListener() {
+    const listener = () => {
+      isDrawingRef.current = false;
+    }
+    window.addEventListener("mouseup", listener);
+  }
+
+  function initMouseDownListener() {
+    if(!canvasRef.current) return;
+    const listener = () => {
+      isDrawingRef.current = true;
+    }
+    canvasRef.current.addEventListener("mousedown", listener);
   }
 
   function computePointInCanvas(clientX, clientY) {
