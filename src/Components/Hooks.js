@@ -4,6 +4,8 @@ export function useOnDraw(onDraw) {
 
   const canvasRef = useRef(null);
 
+  const isDrawingRef = useRef(false);
+
   function setCanvasRef(ref) {
     if(!ref) return;
     canvasRef.current = ref;
@@ -12,10 +14,12 @@ export function useOnDraw(onDraw) {
 
   function initMouseMoveListener() {
     const mouseMoveListener = (e) => {
-      const point = computePointInCanvas(e.clientX, e.clientY);
-      const ctx = canvasRef.current.getContext('2d');
-      if(onDraw) onDraw(ctx, point);
-      console.log(point);
+      if(isDrawingRef.current) {
+        const point = computePointInCanvas(e.clientX, e.clientY);
+        const ctx = canvasRef.current.getContext('2d');
+        if(onDraw) onDraw(ctx, point);
+        console.log(point);
+      }
     }
     window.addEventListener("mousemove", mouseMoveListener)
   }
